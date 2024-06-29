@@ -1,4 +1,5 @@
 import sys
+from source.logger import logging
 
 def error_msg_details(error,error_deatail:sys):
     # returns 3 information,but we're only intrested in the last one

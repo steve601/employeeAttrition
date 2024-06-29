@@ -2,10 +2,13 @@ import os
 import sys
 from source.exception import UserException
 from source.logger import logging
+from source.main_project.data_transformation import DataTransformation
+from source.main_project.model_trainer import ModelTrainer
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
 
+logging.info('Creation of outputs paths')
 @dataclass
 class DataCollectionConfig:
     # where the outputs will be saved
@@ -15,7 +18,7 @@ class DataCollectionConfig:
     
 class DataCollection:
     def __init__(self):
-        self.collection_config = DataCollectionConfig()
+        self.collection_config = DataCollectionConfig() #instantiating the class above
     def start_collection(self):
         logging.info('Start of data ingestion method')
         try:
@@ -41,6 +44,18 @@ class DataCollection:
         except Exception as e:
             raise UserException(e,sys)
         
-if __name__ == '__main__':
+if __name__ == "__main__":
+    # creating the object for dataCellection class
     obj = DataCollection()
-    obj.start_collection()
+    # accessing method for that class
+    train_path,test_path = obj.start_collection()
+    
+    # instantiating the datatransformer class
+    transformer_obj = DataTransformation()
+    # accessing its equivalent method
+    train_arr,test_arr = transformer_obj.start_data_transformation(train_path,test_path)
+    
+    # instantiating Modeltrainer class
+    model_obj = ModelTrainer()
+    # accessing its equivalent method
+    model_obj.start_of_model_training(train_arr,test_arr)
