@@ -12,11 +12,9 @@
 2.Features
 3.Installation
 4.Usage
-5.Model Training
-6.Prediction
-7.Results
-8.Contributing
-9.License 
+5.Deploymnet to AWS
+6.Contributing
+
 
 
 ## Project Overview
