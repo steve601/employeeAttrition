@@ -31,3 +31,11 @@ def evaluate_model(x_train,y_train,x_test,y_test,models):
         return report
     except:
         pass
+    
+def load_object(file_path):
+    try:
+        with open(file_path, 'rb') as file:
+            loaded_model = pickle.load(file)
+        return loaded_model
+    except Exception as e:
+        raise UserException(e,sys)

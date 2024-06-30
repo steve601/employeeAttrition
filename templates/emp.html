@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Attrition Classification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .column {
+            flex: 50%;
+            padding: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        .radio-group {
+            margin-bottom: 10px;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: blue;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .result {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Employee Attrition Classification</h1>
+        <form action='/predict' method='POST'>
+            <div class="row">
+                <div class="column">
+                    <label>Gender</label>
+                    <div class="radio-group">
+                        <input type="radio" id="male" name="gender" value=1>
+                        <label for="male">Male</label>
+                        <input type="radio" id="female" name="gender" value=0>
+                        <label for="female">Female</label>
+                    </div>
+                    <label for="years">Years at Company</label>
+                    <input type="text" id="years" name="years" min=1 max=80 value="{{ request.form.years if request.form else '' }}" required>
+                    <label for="work-life-balance">Work-Life Balance</label>
+                    <select id="work-life-balance" name="work-life-balance">
+                        <option value="Good">Good</option>
+                        <option value="Fair">Fair</option>
+                        <option value="Excellent">Excellent</option>
+                        <option value="Poor">Poor</option>
+                    </select>
+                    <label for="job-satisfaction">Job Satisfaction</label>
+                    <select id="job-satisfaction" name="job-satisfaction">
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                        <option value="Very High">Very High</option>
+                    </select>
+                    <label for="performance-rating">Performance Rating</label>
+                    <select id="performance-rating" name="performance-rating">
+                        <option value="Low">Low</option>
+                        <option value="Below Average">Below Average</option>
+                        <option value="Average">Average</option>
+                        <option value="High">High</option>
+                    </select>
+                    <label for="promotions">Number of Promotions</label>
+                    <input type="text" id="promotions" name="promotions" min=0 value="{{ request.form.promotions if request.form else '' }}" required>
+                    <label>Overtime?</label>
+                    <div class="radio-group">
+                        <input type="radio" id="overtime-yes" name="overtime" value=1>
+                        <label for="overtime-yes">Yes</label>
+                        <input type="radio" id="overtime-no" name="overtime" value=0>
+                        <label for="overtime-no">No</label>
+                    </div>
+                    <label for="distance">Distance from Home(miles)</label>
+                    <input type="text" id="distance" name="distance" min=1 value="{{ request.form.distance if request.form else '' }}" required>
+                </div>
+                <div class="column">
+                    <label for="education-level">Education Level</label>
+                    <select id="education-level" name="education-level">
+                        <option value="">Associate Degree</option>
+                        <option value="Master’s Degree">Master's Degree</option>
+                        <option value="Bachelor’s Degree">Bachelor's Degree</option>
+                        <option value="High School">High School</option>
+                        <option value="phD">phD</option>
+                    </select>
+                    <label for="marital-status">Marital Status</label>
+                    <select id="marital-status" name="marital-status">
+                        <option value=0>Single</option>
+                        <option value=1>Married</option>
+                        <option value=2>Divorced</option>
+                    </select>
+                    <label for="dependents">Number of Dependents</label>
+                    <input type="text" id="dependents" name="dependents" min=0 max=15 value="{{ request.form.dependents if request.form else '' }}" required>
+                    <label for="job-level">Job Level</label>
+                    <select id="job-level" name="job-level">
+                        <option value="Entry">Entry</option>
+                        <option value="Mid">Mid</option>
+                        <option value="Senior">Senior</option>
+                    </select>
+                    <label for="company-size">Company Size</label>
+                    <select id="company-size" name="company-size">
+                        <option value="Small">Small</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Large">Large</option>
+                    </select>
+                    <label>Remote Work?</label>
+                    <div class="radio-group">
+                        <input type="radio" id="remote-yes" name="remote" value=1>
+                        <label for="remote-yes">Yes</label>
+                        <input type="radio" id="remote-no" name="remote" value=0>
+                        <label for="remote-no">No</label>
+                    </div>
+                    <label for="company-reputation">Company Reputation</label>
+                    <select id="company-reputation" name="company-reputation">
+                        <option value="Poor">Poor</option>
+                        <option value="Fair">Fair</option>
+                        <option value="Good">Good</option>
+                        <option value="Excellent">Excellent</option>
+                    </select>
+                    <label for="employee-recognition">Employee Recognition</label>
+                    <select id="employee-recognition" name="employee-recognition">
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                        <option value="Very High">Very High</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit">Predict</button>
+        </form>
+        <div class="result"><h3> {{ text }} </h3></div>
+    </div>
+</body>
+</html>
